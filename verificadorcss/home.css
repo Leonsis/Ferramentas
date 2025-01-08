@@ -1,0 +1,7 @@
+.lazy-bg {
+    background-color: #f0f0f0; /* Cor de fundo de carregamento */   
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.3s ease-in-out; /* Transição suave */
+}
