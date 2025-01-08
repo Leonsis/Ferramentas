@@ -1,4 +1,8 @@
 <?php
+	/* 
+ 		Script para Ajudar na linkagem do site, ajuda a colocar sec e con nas class corretas.
+   		Para identificar quais vão ser a seções e os conteudos de cada seção.
+ 	*/
 	$index = __DIR__ . '/arquivo.html';
 	$content = file_get_contents($index);
 	
