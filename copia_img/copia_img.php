@@ -1,50 +1,73 @@
 <?php
-    // URL do site do qual você deseja baixar as imagens
-    $siteUrl = "https://hoogliato3.hoogli.dev.br/";
+    // Coloque aqui a URL do site do qual você deseja baixar as imagens
+    $siteUrl = "https://html.themeholy.com/realar/demo/home-2-op.html";
 
     $destino = __DIR__ . "/imagens";
     if (!is_dir($destino)) {
         mkdir($destino, 0777, true);
     }
 
+    function getAbsoluteUrl($src, $baseUrl) {
+        // Se já for uma URL absoluta, retorna como está
+        if (filter_var($src, FILTER_VALIDATE_URL)) {
+            return $src;
+        }
+
+        // Pega apenas a parte base do site (sem o arquivo HTML)
+        $parsedUrl = parse_url($baseUrl);
+        $base = $parsedUrl['scheme'] . "://" . $parsedUrl['host'];
+
+        // Se houver caminho antes do arquivo HTML, adiciona
+        if (isset($parsedUrl['path'])) {
+            $path = dirname($parsedUrl['path']);
+            if ($path !== "/") {
+                $base .= $path;
+            }
+        }
+
+        // Retorna a URL absoluta
+        return rtrim($base, '/') . '/' . ltrim($src, '/');
+    }
+
+    function baixarImagem($url, $destino) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+        $imagem = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && $imagem) {
+            file_put_contents($destino, $imagem);
+            return true;
+        }
+        return false;
+    }
+
     function baixarImagens($url, $destino) {
         // Carregar o HTML do site
         $html = file_get_contents($url);
-
-        // Criar um objeto DOMDocument
         $dom = new DOMDocument();
-        
-        // Configura para suprimir warnings ao carregar o HTML
         @$dom->loadHTML($html);
 
-        // Obter todas as tags <img>
         $images = $dom->getElementsByTagName('img');
 
-        // Loop por todas as imagens
         foreach ($images as $img) {
-            // Obter o link da imagem
             $src = $img->getAttribute('src');
-            
-            // Converter URLs relativas para absolutas
-            $imageUrl = (strpos($src, 'http') === 0) ? $src : $url . '/' . ltrim($src, '/');
-
-            // Nome do arquivo (extraído da URL da imagem)
+            $imageUrl = getAbsoluteUrl($src, $url);
             $fileName = basename(parse_url($imageUrl, PHP_URL_PATH));
-
-            // Caminho completo do destino
             $filePath = $destino . '/' . $fileName;
 
-            // Baixar e salvar a imagem no diretório
-            if (@file_put_contents($filePath, file_get_contents($imageUrl))) {
+            if (baixarImagem($imageUrl, $filePath)) {
                 echo "Imagem baixada: $fileName\n";
             } else {
-                echo "Falha ao baixar a imagem: $imageUrl\n";
+                echo "Falha ao baixar: $imageUrl\n";
             }
         }
     }
 
-    // Chamar a função para baixar as imagens
     baixarImagens($siteUrl, $destino);
-
     echo "Processo concluído.";
 ?>
