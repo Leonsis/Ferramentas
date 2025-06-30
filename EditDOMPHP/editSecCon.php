@@ -50,18 +50,18 @@
     $divs = $xpath->query('.//div[not(.//p | .//a | .//h1 | .//h2 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x | .//span | .//li) and  normalize-space(text())]');
     if($divs->length > 0) {
         foreach ($divs as $div) {
-					if ($div instanceof DOMElement) {
-							$text = $div->textContent;
-							$div->nodeValue ='';
-							// Criar o novo elemento x
-							$newElement = $dom->createElement('x', htmlspecialchars($text));
-							//$newElement->setAttribute('class', 'con');
+			if ($div instanceof DOMElement) {
+				$text = $div->textContent;
+				$div->nodeValue ='';
+				// Criar o novo elemento x
+				$newElement = $dom->createElement('x', htmlspecialchars($text));
+				//$newElement->setAttribute('class', 'con');
 
-							// Inserir o novo elemento no DOM
-							$div->appendChild($newElement);
-					} else {
-							echo "Elemento encontrado não é um DOMElement.\n";
-					}
+				// Inserir o novo elemento no DOM
+				$div->appendChild($newElement);
+			} else {
+				echo "Elemento encontrado não é um DOMElement.\n";
+			}
         }
     }
 
@@ -96,8 +96,48 @@
 			}
 		}
 	}
-    
-    // Encontrar as tags específicas dentro de cada <section>
+
+	// Encontrar as tags específicas dentro de cada <section>
+	$h2s = $xpath->query('.//h2[not(.//p | .//a | .//h1 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x)]');
+	if($h2s->length > 0) {
+		foreach ($h2s as $h2) {
+			if ($h2 instanceof DOMElement) {
+				$hasIorImg = $xpath->query('.//i | .//img', $h2)->length > 0;
+				$hasSpan = $xpath->query('.//span', $h2)->length > 0;
+
+				if ($hasIorImg) {
+					// Encapsula texto puro em <x> se houver <i> ou <img>
+					foreach ($h2->childNodes as $child) {
+						if ($child instanceof DOMText && trim($child->wholeText) !== '') {
+							$text = $child->wholeText;
+							$child->nodeValue = '';
+							$newElement = $dom->createElement('x', htmlspecialchars($text));
+							$h2->insertBefore($newElement, $child);
+						}
+					}
+				} elseif ($hasSpan) {
+					// Encapsula texto puro que é irmão direto de <span> em <x>
+					foreach ($h2->childNodes as $child) {
+						if ($child instanceof DOMText && trim($child->wholeText) !== '') {
+							$text = $child->wholeText;
+							$child->nodeValue = '';
+							$newElement = $dom->createElement('x', htmlspecialchars($text));
+							$h2->insertBefore($newElement, $child);
+						}
+					}
+				} else {
+					// Adiciona a classe 'con' normalmente
+					$existingClass = $h2->getAttribute('class');
+					$newClass = trim($existingClass . ' con');
+					$h2->setAttribute('class', $newClass);
+				}
+			} else {
+				echo "Elemento encontrado não é um DOMElement.\n";
+			}
+		}
+	}
+
+	// Encontrar as tags específicas dentro de cada <section>
 	$h3s = $xpath->query('.//h3[not(.//p | .//a | .//h1 | .//h2 |  .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x | .//span)]');
 	if($h3s->length > 0) {
 		foreach ($h3s as $h3) {
@@ -112,25 +152,8 @@
 				echo "Elemento encontrado não é um DOMElement.\n";
 			}
 		}
-	} 
-
-	// Encontrar as tags específicas dentro de cada <section>
-	$h2s = $xpath->query('.//h2[not(.//p | .//a | .//h1 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x | .//span)]');
-	if($h2s->length > 0) {
-		foreach ($h2s as $h2) {
-			// Verificar se o $tag é uma instância de DOMElement
-			if ($h2 instanceof DOMElement) {
-				// Obter o valor atual do atributo class
-				$existingClass = $h2->getAttribute('class');
-				// Adicionar a classe 'con', preservando as classes existentes
-				$newClass = trim($existingClass . ' con');
-				$h2->setAttribute('class', $newClass);
-			} else {
-				echo "Elemento encontrado não é um DOMElement.\n";
-			}
-		}
 	}
-
+	
     // Encontrar as tags específicas dentro de cada <section>
 	$h5s = $xpath->query('.//h5[not(.//p | .//a | .//h1 | .//h2 | .//h4 | .//h6 | .//img | .//strong | .//textarea | .//x | .//span)]');
 	if($h5s->length > 0) {
