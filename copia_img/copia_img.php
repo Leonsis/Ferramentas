@@ -1,5 +1,5 @@
 <?php
-    echo "Informe a URL do site do qual você deseja baixar as imagens";
+    echo "Informe a URL do site do qual você deseja baixar as imagens: ";
     $siteUrl = trim(fgets(STDIN));
     
     $destino = __DIR__ . "/imagens";
