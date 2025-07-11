@@ -37,6 +37,18 @@ Um sistema em Python que extrai e combina os estilos CSS de arquivos HTML e CSS 
 
 ---
 
+### 4. HashGuard
+
+Um gerador de hash de senhas em PHP que funciona tanto via terminal quanto via interface web, desenvolvido para criar hashes seguros de senhas utilizando o algoritmo PASSWORD_DEFAULT do PHP.  
+**Principais funcionalidades:**
+- **Geração de Hash Seguro:** Utiliza o algoritmo bcrypt (PASSWORD_DEFAULT) para criar hashes únicos e seguros de senhas.
+- **Interface Web Moderna:** Interface responsiva e intuitiva com design moderno, permitindo gerar hashes através do navegador.
+- **Funcionamento via Terminal:** Possibilidade de uso via linha de comando, ideal para automação e scripts.
+- **Verificação de Senhas:** Inclui informações sobre como verificar senhas usando `password_verify()`.
+- **Design Responsivo:** Interface adaptável para dispositivos móveis e desktop.
+
+---
+
 Este repositório foi criado para centralizar todas as ferramentas que contribuem para a otimização dos processos de desenvolvimento e manutenção dos projetos, poupando tempo e garantindo maior consistência no trabalho diário.
 
 Contribuições, sugestões e melhorias são sempre bem-vindas!
