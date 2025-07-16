@@ -204,6 +204,22 @@
 		}
 	}
 
+	$labels = $xpath->query('.//label[not(.//i | .//p | .//a | .//span | .//h1 | .//h2 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x)]');
+	if($labels->length > 0) {
+		foreach ($labels as $label) {
+			// Verificar se o $tag é uma instância de DOMElement
+			if ($label instanceof DOMElement) {
+				// Obter o valor atual do atributo class
+				$existingClass = $label->getAttribute('class');
+				// Adicionar a classe 'con', preservando as classes existentes
+				$newClass = trim($existingClass . ' con');
+				$label->setAttribute('class', $newClass);
+			} else {
+				echo "Elemento encontrado não é um DOMElement.\n";
+			}
+		}
+	}
+
 	$spans = $xpath->query('.//span[not(.//p) and not(.//a) and not(.//h1) and not(.//h2) and not(.//h3) and not(.//h4) and not(.//h5) and not(.//h6) and not(.//strong) and not(.//textarea) and not(.//x) and not(.//button) and not(.//span) and not(.//time) and normalize-space() != ""]');
 	if ($spans->length > 0) {
 		foreach ($spans as $span) {
@@ -260,8 +276,38 @@
 		}
 	}
 
+	$ps = $xpath->query('.//p[not(.//p) and not(.//a) and not(.//h1) and not(.//h2) and not(.//h3) and not(.//h4) and not(.//h5) and not(.//h6) and not(.//strong) and not(.//textarea) and not(.//x) and not(.//button) and not(.//span) and not(.//time) and normalize-space() != ""]');
+	if ($ps->length > 0) {
+		foreach ($ps as $p) {
+			// Verifica se o texto não é vazio
+			if (trim($p->textContent) !== '') {
+				$hasSpecialTags = $xpath->query('.//i | .//img', $p)->length > 0;
 
-	$tags = $xpath->query('.//p | .//h1 | .//h4 | .//img | .//strong | .//textarea | .//x | .//a');
+				if ($hasSpecialTags) {
+					// Caso tenha <i> ou <img>, encapsula o texto em um <x>
+					foreach ($p->childNodes as $child) {
+						if ($child instanceof DOMText && trim($child->wholeText) !== '') {
+							$text = $child->wholeText;  // Pegar o texto original
+							$child->nodeValue = '';     // Limpar o texto no nó atual
+
+							// Criar o novo elemento <x> com o texto original
+							$newElement = $dom->createElement('x', htmlspecialchars($text));
+							$p->insertBefore($newElement, $child); // Adicionar <x> no lugar do texto
+						}
+					}
+				} else {
+					// Caso contrário, apenas adiciona a classe "con" ao <p>
+					if ($p instanceof DOMElement) {
+						$existingClass = $p->getAttribute('class');
+						$newClass = trim($existingClass . ' con');
+						$p->setAttribute('class', $newClass);
+					}
+				}
+			}
+		}
+	}
+
+	$tags = $xpath->query('.//h1 | .//h4 | .//img | .//strong | .//textarea | .//x | .//a');
 	foreach ($tags as $tag) {
 		// Verificar se o $tag é uma instância de DOMElement
 		if ($tag instanceof DOMElement) {
