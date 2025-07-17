@@ -98,6 +98,46 @@
 	}
 
 	// Encontrar as tags específicas dentro de cada <section>
+	$h1s = $xpath->query('.//h1[not(.//p | .//a | .//h2 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x)]');
+	if($h1s->length > 0) {
+		foreach ($h1s as $h1) {
+			if ($h1 instanceof DOMElement) {
+				$hasIorImg = $xpath->query('.//i | .//img', $h1)->length > 0;
+				$hasSpan = $xpath->query('.//span', $h1)->length > 0;
+
+				if ($hasIorImg) {
+					// Encapsula texto puro em <x> se houver <i> ou <img>
+					foreach ($h1->childNodes as $child) {
+						if ($child instanceof DOMText && trim($child->wholeText) !== '') {
+							$text = $child->wholeText;
+							$child->nodeValue = '';
+							$newElement = $dom->createElement('x', htmlspecialchars($text));
+							$h1->insertBefore($newElement, $child);
+						}
+					}
+				} elseif ($hasSpan) {
+					// Encapsula texto puro que é irmão direto de <span> em <x>
+					foreach ($h1->childNodes as $child) {
+						if ($child instanceof DOMText && trim($child->wholeText) !== '') {
+							$text = $child->wholeText;
+							$child->nodeValue = '';
+							$newElement = $dom->createElement('x', htmlspecialchars($text));
+							$h1->insertBefore($newElement, $child);
+						}
+					}
+				} else {
+					// Adiciona a classe 'con' normalmente
+					$existingClass = $h1->getAttribute('class');
+					$newClass = trim($existingClass . ' con');
+					$h1->setAttribute('class', $newClass);
+				}
+			} else {
+				echo "Elemento encontrado não é um DOMElement.\n";
+			}
+		}
+	}
+
+	// Encontrar as tags específicas dentro de cada <section>
 	$h2s = $xpath->query('.//h2[not(.//p | .//a | .//h1 | .//h3 | .//h4 | .//h5 | .//h6 | .//img | .//strong | .//textarea | .//x)]');
 	if($h2s->length > 0) {
 		foreach ($h2s as $h2) {
@@ -307,7 +347,7 @@
 		}
 	}
 
-	$tags = $xpath->query('.//h1 | .//h4 | .//img | .//strong | .//textarea | .//x | .//a');
+	$tags = $xpath->query('.//h4 | .//img | .//strong | .//textarea | .//x | .//a');
 	foreach ($tags as $tag) {
 		// Verificar se o $tag é uma instância de DOMElement
 		if ($tag instanceof DOMElement) {
