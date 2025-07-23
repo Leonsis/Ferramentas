@@ -49,6 +49,17 @@ Um gerador de hash de senhas em PHP que funciona tanto via terminal quanto via i
 
 ---
 
+### 5. Verificador de Domínios
+
+Um sistema em Python que verifica automaticamente os domínios presentes em um diretório local, validando o nome e tentando resolver o endereço IP de cada domínio.
+**Principais funcionalidades:**
+- Lista todos os subdiretórios de um caminho especificado (por padrão `/var/www`), considerando cada um como um domínio.
+- Verifica se o nome do subdiretório é um domínio válido.
+- Tenta resolver o IP de cada domínio usando DNS.
+- Exibe uma lista com o domínio e seu respectivo IP, ou uma mensagem de erro caso não seja possível resolver.
+
+---
+
 Este repositório foi criado para centralizar todas as ferramentas que contribuem para a otimização dos processos de desenvolvimento e manutenção dos projetos, poupando tempo e garantindo maior consistência no trabalho diário.
 
 Contribuições, sugestões e melhorias são sempre bem-vindas!
