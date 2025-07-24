@@ -60,6 +60,20 @@ Um sistema em Python que verifica automaticamente os domínios presentes em um d
 
 ---
 
+### 6. ZipDeploy
+
+Uma ferramenta Python automatizada para criar arquivos ZIP de múltiplos projetos web em grande escala, ideal para servidores que hospedam diversos domínios e precisam de backup ou deploy automatizado.
+**Principais funcionalidades:**
+- **Processamento em lote**: Processa automaticamente uma lista predefinida de domínios
+- **Verificação de existência**: Verifica se cada diretório existe antes de tentar zipar
+- **Nomenclatura inteligente**: Cria arquivos ZIP com o nome do domínio principal
+- **Exclusão automática**: Evita incluir o próprio arquivo ZIP no processo
+- **Logs detalhados**: Fornece feedback completo sobre o processo
+- **Tratamento de erros**: Captura e reporta erros sem interromper o processamento
+- **Automação via cron**: Permite execução programada para backups automáticos
+
+---
+
 Este repositório foi criado para centralizar todas as ferramentas que contribuem para a otimização dos processos de desenvolvimento e manutenção dos projetos, poupando tempo e garantindo maior consistência no trabalho diário.
 
 Contribuições, sugestões e melhorias são sempre bem-vindas!
