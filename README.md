@@ -35,21 +35,10 @@ Um sistema em Python que extrai e combina os estilos CSS de arquivos HTML e CSS 
 - **Combinação de CSS Externo:** Lê um arquivo CSS externo (style.css) e une seu conteúdo ao CSS extraído.
 - **Futuras Melhorias:** Planeja implementar uma análise que identifique e liste estilos duplicados, facilitando a remoção e a otimização do código.
 
----
-
-### 4. HashGuard
-
-Um gerador de hash de senhas em PHP que funciona tanto via terminal quanto via interface web, desenvolvido para criar hashes seguros de senhas utilizando o algoritmo PASSWORD_DEFAULT do PHP.  
-**Principais funcionalidades:**
-- **Geração de Hash Seguro:** Utiliza o algoritmo bcrypt (PASSWORD_DEFAULT) para criar hashes únicos e seguros de senhas.
-- **Interface Web Moderna:** Interface responsiva e intuitiva com design moderno, permitindo gerar hashes através do navegador.
-- **Funcionamento via Terminal:** Possibilidade de uso via linha de comando, ideal para automação e scripts.
-- **Verificação de Senhas:** Inclui informações sobre como verificar senhas usando `password_verify()`.
-- **Design Responsivo:** Interface adaptável para dispositivos móveis e desktop.
 
 ---
 
-### 5. Verificador de Domínios
+### 4. Verificador de Domínios
 
 Um sistema em Python que verifica automaticamente os domínios presentes em um diretório local, validando o nome e tentando resolver o endereço IP de cada domínio.
 **Principais funcionalidades:**
@@ -60,7 +49,7 @@ Um sistema em Python que verifica automaticamente os domínios presentes em um d
 
 ---
 
-### 6. ZipDeploy
+### 5. ZipDeploy
 
 Uma ferramenta Python automatizada para criar arquivos ZIP de múltiplos projetos web em grande escala, ideal para servidores que hospedam diversos domínios e precisam de backup ou deploy automatizado.
 **Principais funcionalidades:**
